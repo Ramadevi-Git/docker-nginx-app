@@ -33,6 +33,7 @@ pipeline {
             }
         }
 
+        stage('Run Container') {
             steps {
                 sh '''
                     docker rm -f $CONTAINER_NAME || true
