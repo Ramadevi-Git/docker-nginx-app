@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        DOCKERHUB_CREDENTIALS = credentials('docker_hub_cr')
+        DOCKERHUB_CREDENTIALS = credentials('ramakarthi')
         IMAGE_NAME = "rama/my_app"
         CONTAINER_NAME = "my_app"
     }
