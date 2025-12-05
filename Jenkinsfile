@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         DOCKERHUB_CREDENTIALS = credentials('docker_hub_cr')
-        IMAGE_NAME = "bharathiraja3234/my_app"
+        IMAGE_NAME = "rama/my_app"
         CONTAINER_NAME = "my_app"
     }
 
