@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         DOCKERHUB_CREDENTIALS = credentials('Docker-cred')
-        IMAGE_NAME = "rama/my_app"
+        IMAGE_NAME = "ramakarthi/my-custom-image"
         CONTAINER_NAME = "my_app"
     }
 
@@ -33,7 +33,6 @@ pipeline {
             }
         }
 
-        stage('Run Container') {
             steps {
                 sh '''
                     docker rm -f $CONTAINER_NAME || true
