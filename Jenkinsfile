@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         DOCKERHUB_CREDENTIALS = credentials('docker_hub_cr')
-        IMAGE_NAME = "bharathiraja3234/bharathiraja_11:latest"
+        IMAGE_NAME = "bharathiraja3234/my_app"
         CONTAINER_NAME = "my_app"
     }
 
@@ -18,8 +18,8 @@ pipeline {
         stage('Login to Docker Hub') {
             steps {
                 sh '''
-                  echo $DOCKERHUB_CREDENTIALS_PSW | \
-                  sudo docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin
+                echo $DOCKERHUB_CREDENTIALS_PSW | \
+                sudo docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin
                 '''
             }
         }
@@ -33,10 +33,10 @@ pipeline {
         stage('Run container') {
             steps {
                 sh '''
-                  sudo docker stop $CONTAINER_NAME || true
-                  sudo docker rm $CONTAINER_NAME || true
+                sudo docker stop $CONTAINER_NAME || true
+                sudo docker rm $CONTAINER_NAME || true
 
-                  sudo docker run -d \
+                sudo docker run -d \
                     --name $CONTAINER_NAME \
                     -p 80:80 \
                     $IMAGE_NAME:$BUILD_NUMBER
