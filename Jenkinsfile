@@ -9,37 +9,39 @@ pipeline {
 
     stages {
 
-        stage('Build docker image') {
-            steps {
-                sh 'sudo docker build -t $IMAGE_NAME:$BUILD_NUMBER .'
-            }
-        }
-
-        stage('Login to Docker Hub') {
+        stage('Build Image') {
             steps {
                 sh '''
-                echo $DOCKERHUB_CREDENTIALS_PSW | \
-                sudo docker login -u $DOCKERHUB_CREDENTIALS_USR --rama@123
+                    export DOCKER_BUILDKIT=0
+                    docker build -t $IMAGE_NAME:$BUILD_NUMBER .
                 '''
             }
         }
 
-        stage('Push image') {
+        stage('Docker Login') {
             steps {
-                sh 'sudo docker push $IMAGE_NAME:$BUILD_NUMBER'
+                sh '''
+                    echo "$DOCKERHUB_CREDENTIALS_PSW" | docker login \
+                        -u "$DOCKERHUB_CREDENTIALS_USR" --password-stdin
+                '''
             }
         }
 
-        stage('Run container') {
+        stage('Push Image') {
+            steps {
+                sh 'docker push $IMAGE_NAME:$BUILD_NUMBER'
+            }
+        }
+
+        stage('Run Container') {
             steps {
                 sh '''
-                sudo docker stop $CONTAINER_NAME || true
-                sudo docker rm $CONTAINER_NAME || true
+                    docker rm -f $CONTAINER_NAME || true
 
-                sudo docker run -d \
-                    --name $CONTAINER_NAME \
-                    -p 80:80 \
-                    $IMAGE_NAME:$BUILD_NUMBER
+                    docker run -d \
+                        --name $CONTAINER_NAME \
+                        -p 80:80 \
+                        $IMAGE_NAME:$BUILD_NUMBER
                 '''
             }
         }
